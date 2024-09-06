@@ -1,0 +1,8 @@
+version: "3.8"
+services:
+  url2md:
+    container_name: url2md
+    image: akt311209/url2md:latest
+    restart: unless-stopped
+    ports:
+      - 53112:53112

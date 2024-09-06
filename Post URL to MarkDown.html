@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Convert HTML to Markdown</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon-md.png">
+    <link rel="icon" type="image/png" href="apple-touch-icon-md.png" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script>
+        async function postMarkdown() {
+            const url = document.getElementById('url').value;
+            const html = document.getElementById('html').value;
+            const title = document.getElementById('title').checked;
+            const links = !document.getElementById('links').checked;
+
+            try {
+                const response = await fetch('/post-markdown?title='+title+'&links='+links, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ url, html })
+                });
+
+                const data = await response.json();
+                console.log(data)
+                document.getElementById('text').value = data;
+            } catch (error) {
+                console.error('Error fetching Markdown:', error);
+                document.getElementById('text').value = 'Error fetching Markdown'
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-10 col-lg-offset-1">
+                <h1>Output Markdown</h1>
+                <p class="lead">Please enter paste HTML code and the source url (optional)</p>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="url">Source Web Page URL (optional, required for option ignore link.)</label>
+                        <input id="url" type="url" name="url" class="form-control" placeholder="Please enter the URL" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="html">Paste HTML Code</label>
+                        <textarea id="html" name="html" class="form-control" placeholder="Paste HTML code here" rows="10"></textarea>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label for="title">Include Title</label>
+                        <input id="title" type="checkbox" name="title" class="form-control" checked />
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label for="links">Ignore Links</label>
+                        <input id="links" type="checkbox" name="links" class="form-control" />
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <input type="button" class="btn btn-success btn-send" value="Fetch and Convert" onclick="postMarkdown()">
+                </div>
+            </div>
+        </div>
+        <div style="margin: 2em;">
+            <textarea id="text" name="text" style="font-family: monospace, monospace; width: 100%; height: 30em;" onclick="this.select()"></textarea>
+        </div>
+    </div>
+</body>
+</html>
