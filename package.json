@@ -18,7 +18,7 @@
     "start": "node index.js",
     "test": "jest"
   },
-  "author": "Lee Hanken",
+  "author": "AKT311209",
   "license": "MIT",
   "devDependencies": {
     "jest": "^29.7.0"
